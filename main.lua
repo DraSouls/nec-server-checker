@@ -167,6 +167,11 @@ local function getServerInfo(host, port, password, getStatus, getMods)
                 result.mods = data
                 result.modCount = #data
                 modlistCache[host..':'..status.modsHash] = { os.time() + MODLIST_CACHE_TTL, data }
+            else
+                result.mods = {}
+                result.modCount = -1
+                result.err = "Server sent unknown packet: "..tostring(data)
+                p(data)
             end
         end
     end
@@ -187,7 +192,7 @@ local app = weblitApp.bind {
 }
 
 app.route({method = 'GET', path = '/'}, function(req, res)
-    res.body = fs.readFileSync('index.html')
+    res.body = fs.readFileSync('index.min.html') or fs.readFileSync('index.html')
     res.code = 200
 end)
 
@@ -221,7 +226,7 @@ app.route({method = 'POST', path = '/api'}, function(req, res)
     local s, t = pcall(getServerInfo,
         data.host,
         tonumber(data.port) or 14159,
-        tonumber(NCPSK[data.psk]) or tonumber(data.passHash) or data.password or '',
+        tonumber(NCPSK[data.psk] or NCPSK[data.password]) or tonumber(data.passHash) or data.password or '',
         data.getStatus,
         data.getMods
     )
@@ -231,9 +236,10 @@ app.route({method = 'POST', path = '/api'}, function(req, res)
         res.code = 500
         return
     end
+    t.host = data.host
 
     res.body = json.encode(t)
-    res.code = t.code
+    res.code = 200
 end)
 
 
