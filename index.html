@@ -30,6 +30,7 @@ IBNr2RuOlAAAAABJRU5ErkJggg==" />
         height: 10px;
       }
       #footer {
+        margin: 10px 0px;
         height: 10px;
       }
       .err th { background-color: #f8a0a0 !important; }
@@ -164,7 +165,9 @@ IBNr2RuOlAAAAABJRU5ErkJggg==" />
       </table>
     </div>
     <div style="font-family: monospace; display: none"><pre id="result"></pre></div>
-    <div id="footer"></div>
+    <div id="footer">
+      <center><small>No user data and input from this page is tracked and stored anywhere by me.</small></center>
+    </div>
     <script type="text/javascript">
       const RETRIES = 1;
 
@@ -209,7 +212,7 @@ IBNr2RuOlAAAAABJRU5ErkJggg==" />
         document.getElementById('info_version').innerHTML = t.status.version;
         document.getElementById('info_playersOnline').innerHTML = t.status.playersOnline;
         document.getElementById('info_slots').innerHTML = t.status.slots;
-        document.getElementById('info_passwordProtected').innerHTML = t.status.passwordProtected;
+        document.getElementById('info_passwordProtected').innerHTML = t.status.passwordProtected ? "Yes" : "No";
         document.getElementById('info_modded').innerHTML = t.status.modsHash == 0 ? "No" : "Yes";
       }
 
